@@ -1,3 +1,6 @@
+// Drag coefficient atmospheric corrections
+#include "ballistics.h"
+
 double calcFR(double Temperature, double Pressure, double RelativeHumidity){
 	double VPw=4e-6*pow(Temperature,3) - 0.0004*pow(Temperature,2)+0.0234*Temperature-0.2517;
 	double FRH=0.995*(Pressure/(Pressure-(0.3783)*(RelativeHumidity)*VPw));

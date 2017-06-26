@@ -1,3 +1,6 @@
+// Used to determine bore angle
+#include "ballistics.h"
+
 double ZeroAngle(int DragFunction, double DragCoefficient, double Vi, double SightHeight, double ZeroRange, double yIntercept){
 
 	// Numerical Integration variables

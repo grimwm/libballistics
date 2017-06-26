@@ -1,3 +1,6 @@
+// G-function retardations
+#include "ballistics.h"
+
 double retard(int DragFunction, double DragCoefficient, double Velocity){
 
 //	printf("DF: %d, CD: %f, V: %f,);

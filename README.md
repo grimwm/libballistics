@@ -7,7 +7,7 @@ This library supports the standard Drag Functions (G1, G2, G3, G5, G6, G7, and G
 
 Exterior Ballistics Primer for Small Arms
 
-Exterior ballistic problems do not generally have algebraic solutions.  The models are step-wise models, developed using complex doppler radar ranges.  Exterior ballistic models attempt to describe how a projectile behaves at a particular velocity by relating it to a "standard" projectile, which was tested i depth.
+Exterior ballistic problems do not generally have algebraic solutions.  The models are step-wise models, developed using complex doppler radar ranges.  Exterior ballistic models attempt to describe how a projectile behaves at a particular velocity by relating it to a "standard" projectile, which was tested in depth.
 
 The most common drag function in use is the G1 drag function.  Virtually all published "ballistic coefficient" data in reloading manuals and product literature are G1 drag coefficients.
 

@@ -1,3 +1,6 @@
+// Used to make retrieving solution data easier.
+#include "ballistics.h"
+
 double GetRange(double* sln, int yardage){
 	double size=sln[__BCOMP_MAXRANGE__*10+1];
 	if (yardage<size){

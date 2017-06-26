@@ -1,4 +1,6 @@
 // Specialty angular conversion functions
+#include <math.h>
+
 double DegtoMOA(double deg){
 	return deg*60;
 }

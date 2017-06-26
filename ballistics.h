@@ -14,7 +14,6 @@
 enum __DragFunctions {G1=1,G2,G3,G4,G5,G6,G7,G8};
 
 // Angular conversion functions to make things a little easier. 
-// Source is in _angle.c
 double DegtoMOA(double deg); // Converts degrees to minutes of angle
 double DegtoRad(double deg); // Converts degrees to radians
 double MOAtoDeg(double moa); // Converts minutes of angle to degrees
@@ -24,7 +23,6 @@ double RadtoMOA(double rad); // Converts radiants to minutes of angle
 
 
 // A function to calculate ballistic retardation values based on standard drag functions.
-// Source is in "_retard.c"
 double retard(int DragFunction, double DragCoefficient, double Vi);
 /* Arguments:
 		DragFunction:  G1, G2, G3, G4, G5, G6, G7, or G8.  All are enumerated above.
@@ -39,7 +37,6 @@ double retard(int DragFunction, double DragCoefficient, double Vi);
 
 // A function to correct a "standard" Drag Coefficient for differing atmospheric conditions.
 // Returns the corrected drag coefficient for supplied drag coefficient and atmospheric conditions.
-// Source is in "_atmosphere.c"
 double AtmCorrect(double DragCoefficient, double Altitude, double Barometer, double Temperature, double RelativeHumidity);
 /* Arguments:
 		DragCoefficient:  The coefficient of drag for a given projectile.
@@ -59,7 +56,6 @@ double AtmCorrect(double DragCoefficient, double Altitude, double Barometer, dou
 // A function to compute the windage deflection for a given crosswind speed,
 // given flight time in a vacuum, and given flight time in real life.
 // Returns the windage correction needed in inches.
-// Source is in "_windage.c"
 double Windage(double WindSpeed, double Vi, double x, double t);
 /* Arguments:
 		WindSpeed:  The wind velocity in mi/hr.
@@ -73,7 +69,6 @@ double Windage(double WindSpeed, double Vi, double x, double t);
 */
 
 // Functions to resolve any wind / angle combination into headwind and crosswind components.
-// Source is in "_windage.c"
 double HeadWind(double WindSpeed, double WindAngle);
 double CrossWind(double WindSpeed, double WindAngle);
 /* Arguments:
@@ -91,7 +86,6 @@ double CrossWind(double WindSpeed, double WindAngle);
 
 // A function to determine the bore angle needed to achieve a target zero at Range yards
 // (at standard conditions and on level ground.)
-// Source is in "_zero.c"
 double ZeroAngle(int DragFunction, double DragCoefficient, double Vi, double SightHeight, double ZeroRange, double yIntercept); 
 /*  Arguments: 
 		DragFunction:  The drag function to use (G1, G2, G3, G5, G6, G7, G8)
@@ -110,7 +104,6 @@ double ZeroAngle(int DragFunction, double DragCoefficient, double Vi, double Sig
 
 
 // A function to generate a ballistic solution table in 1 yard increments, up to __BCOMP_MAXRANGE__.
-// Source is in "_solve.c"
 int SolveAll(int DragFunction, double DragCoefficient, double Vi, double SightHeight, \
 			double ShootingAngle, double ZeroAngle, double WindSpeed, double WindAngle, double** Solution);
 /* Arguments:
@@ -156,18 +149,4 @@ double GetVy(double* sln, int yardage); // Returns the velocity of the projectil
 // For very steep shooting angles, Vx can actually become what you would think of as Vy relative to the ground, 
 // because Vx is referencing the bore's axis.  All computations are carried out relative to the bore's axis, and
 // have very little to do with the ground's orientation.
-
-
-// I have split the source up into several files to make it easier for me to work on and refine.
-// Some people hate this, but I find it is easier to work on the code in small chunks.
-#include "_angle.c"// Angular conversion functions
-#include "_retard.c" // G-function retardations
-#include "_atmosphere.c" // Drag coefficient atmospheric corrections
-#include "_windage.c"// Crosswind correction functions
-#include "_zero.c" // Used to determine bore angle
-#include "_solve.c" // Used to solve ballistic problems 
-#include "_retrieve.c" // Used to make retrieving solution data easier.
 #endif
-
-
-

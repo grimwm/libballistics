@@ -1,3 +1,6 @@
+// Crosswind correction functions
+#include "ballistics.h"
+
 double Windage(double WindSpeed, double Vi, double xx, double t){
 	double Vw = WindSpeed*17.60; // Convert to inches per second.
 	return (Vw*(t-xx/Vi));

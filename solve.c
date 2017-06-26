@@ -1,3 +1,6 @@
+// Used to solve ballistic problems 
+#include "ballistics.h"
+
 int SolveAll(int DragFunction, double DragCoefficient, double Vi, double SightHeight, \
 double ShootingAngle, double ZAngle, double WindSpeed, double WindAngle, double** Solution){
 
