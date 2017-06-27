@@ -4,7 +4,7 @@
 /**
  * A ballistics solution for a projectile at a certain yardage.
  */
-struct BallisticSolutionAtYardage {
+struct Ballistics {
   double range_yards;
   double path_inches;
   double moa_correction;
@@ -16,32 +16,32 @@ struct BallisticSolutionAtYardage {
   double vy; // velocity of projectile perpendicular to the bore direction
 };
 
-struct BallisticSolution* solution_alloc() {
-  struct BallisticSolution* sln = malloc(sizeof(struct BallisticSolution));
-  sln->yardages = malloc(sizeof(struct BallisticSolutionAtYardage) * BALLISTICS_COMPUTATION_MAX_YARDS);
+struct BallisticsSolutions* solution_alloc() {
+  struct BallisticsSolutions* sln = malloc(sizeof(struct BallisticsSolutions));
+  sln->yardages = malloc(sizeof(struct Ballistics) * BALLISTICS_COMPUTATION_MAX_YARDS);
   return sln;
 }
 
-void solution_free(struct BallisticSolution* solution) {
+void solution_free(struct BallisticsSolutions* solution) {
   free(solution->yardages);
   free(solution);
 }
 
-double solution_get_range(struct BallisticSolution* solution, int yardage) {
+double solution_get_range(struct BallisticsSolutions* solution, int yardage) {
   if (yardage < solution->max_yardage) {
     return solution->yardages[yardage].range_yards;
   }
   else return 0;
 }
 
-double solution_get_path(struct BallisticSolution* solution, int yardage) {
+double solution_get_path(struct BallisticsSolutions* solution, int yardage) {
   if (yardage < solution->max_yardage) {
     return solution->yardages[yardage].path_inches;
   }
   else return 0;
 }
 
-double solution_get_moa(struct BallisticSolution* solution, int yardage) {
+double solution_get_moa(struct BallisticsSolutions* solution, int yardage) {
   if (yardage < solution->max_yardage) {
     return solution->yardages[yardage].moa_correction;
   }
@@ -49,49 +49,49 @@ double solution_get_moa(struct BallisticSolution* solution, int yardage) {
 }
 
 
-double solution_get_time(struct BallisticSolution* solution, int yardage) {
+double solution_get_time(struct BallisticsSolutions* solution, int yardage) {
   if (yardage < solution->max_yardage) {
     return solution->yardages[yardage].seconds;
   }
   else return 0;
 }
 
-double solution_get_windage(struct BallisticSolution* solution, int yardage) {
+double solution_get_windage(struct BallisticsSolutions* solution, int yardage) {
   if (yardage < solution->max_yardage) {
     return solution->yardages[yardage].windage_inches;
   }
   else return 0;
 }
 
-double solution_get_windage_moa(struct BallisticSolution* solution, int yardage) {
+double solution_get_windage_moa(struct BallisticsSolutions* solution, int yardage) {
   if (yardage < solution->max_yardage) {
     return solution->yardages[yardage].windage_moa;
   }
   else return 0;
 }
 
-double solution_get_velocity(struct BallisticSolution* solution, int yardage) {
+double solution_get_velocity(struct BallisticsSolutions* solution, int yardage) {
   if (yardage < solution->max_yardage) {
     return solution->yardages[yardage].velocity;
   }
   else return 0;
 }
 
-double solution_get_vx(struct BallisticSolution* solution, int yardage) {
+double solution_get_vx(struct BallisticsSolutions* solution, int yardage) {
   if (yardage < solution->max_yardage) {
     return solution->yardages[yardage].vx;
   }
   else return 0;
 }
 
-double solution_get_vy(struct BallisticSolution* solution, int yardage) {
+double solution_get_vy(struct BallisticsSolutions* solution, int yardage) {
   if (yardage < solution->max_yardage) {
     return solution->yardages[yardage].vy;
   }
   else return 0;
 }
 
-int solve(struct BallisticSolution** solution, int drag_function, double drag_coefficient, double vi,
+int solve(struct BallisticsSolutions** solution, int drag_function, double drag_coefficient, double vi,
           double sight_height, double shooting_angle, double zero_angle, double wind_speed, double wind_angle) {
 
 	double t=0;
@@ -133,7 +133,7 @@ int solve(struct BallisticSolution** solution, int drag_function, double drag_co
 
 
 		if (x/3>=n) {
-      struct BallisticSolutionAtYardage* s = &(*solution)->yardages[n];
+      struct Ballistics* s = &(*solution)->yardages[n];
       s->range_yards = x/3;
       s->path_inches = y*12;
       s->moa_correction = -rad_to_moa(atan(y / x));

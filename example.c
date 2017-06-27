@@ -3,7 +3,7 @@
 
 int main(void) {
 	int k=0;
-	struct BallisticSolution* solution;
+	struct BallisticsSolutions* solution;
 	double bc=0.5; // The ballistic coefficient for the projectile.
 	double v=1200; // Intial velocity, in ft/s
 	double sh=1.6; // The Sight height over bore, in inches.

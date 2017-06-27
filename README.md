@@ -51,7 +51,7 @@ How to use this library
 
 1. Declare storage for accessing solution data.
 
-    `struct BallisticSolution* solution;`
+    `struct BallisticsSolutions* solution;`
 
 1. **Optional**: Use the weather correction functions to correct a standard ballistic
    coefficient for non-standard conditions.
