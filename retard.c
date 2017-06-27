@@ -1,14 +1,14 @@
 // G-function retardations
 #include "ballistics.h"
 
-double retard(int DragFunction, double DragCoefficient, double Velocity) {
+double retard(int drag_function, double drag_coefficient, double velocity) {
 
-	double vp=Velocity;
+	double vp=velocity;
 	double val=-1;
 	double A=-1; // acceleration
 	double M=-1; // mass
 
-	switch(DragFunction) {
+	switch(drag_function) {
 		case G1:
 			if (vp > 4230) { A = 1.477404177730177e-04; M = 1.9565; }
 			else if (vp> 3680) { A = 1.920339268755614e-04; M = 1.925 ; }
@@ -108,8 +108,8 @@ double retard(int DragFunction, double DragCoefficient, double Velocity) {
 			break;
 	}
 
-	if (A!=-1 && M!=-1 && vp>0 && vp<4500) {
-		val=A*pow(vp,M)/DragCoefficient;
+	if (A!=-1 && M!=-1 && vp>0 && vp<10000) {
+		val=A*pow(vp,M)/drag_coefficient;
 		return val;
 	}
 	else {

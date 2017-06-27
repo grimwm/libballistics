@@ -3,7 +3,7 @@
 
 int main(void) {
 	int k=0;
-	double* sln;// A pointer for receiving the ballistic solution.
+	struct BallisticSolution* solution;
 	double bc=0.5; // The ballistic coefficient for the projectile.
 	double v=1200; // Intial velocity, in ft/s
 	double sh=1.6; // The Sight height over bore, in inches.
@@ -15,8 +15,8 @@ int main(void) {
 	// If we wish to use the weather correction features, we need to 
 	// Correct the BC for any weather conditions.  If we want standard conditions,
 	// then we can just leave this commented out.
-	
-	// bc=AtmCorrect(bc, 0, 29.59, 100,.7);
+
+	// bc = atmosphere_correction(bc, 0, 29.59, 100, .7);
 	
 	
 	// First find the angle of the bore relative to the sighting system.
@@ -25,21 +25,20 @@ int main(void) {
 	// to us, but is required for making a full ballistic solution.
 	// It is left here to allow for zero-ing at altitudes (bc) different from the
 	// final solution, or to allow for zero's other than 0" (ex: 3" high at 100 yds)
-	double zeroangle=0;
-	zeroangle=ZeroAngle(G1,bc,v,1.6,zero,0);
+	double zeroangle = zero_angle(G1, bc, v, 1.6, zero, 0);
 	
 	// Now we have everything needed to generate a full solution.
 	// So we do.  The solution is stored in the pointer "sln" passed as the last argument.
 	// k has the number of yards the solution is valid for, also the number of rows in the solution.
-	k=SolveAll(G1,bc,v,sh,angle,zeroangle,windspeed,windangle,&sln);
+	k = solve(&solution, G1, bc, v, sh, angle, zeroangle, windspeed, windangle);
 	
 	// Now print a simple chart of X / Y trajectory spaced at 10yd increments
 	int s=0;
 	for (s=0;s<=100;s++) {
-		printf("\nX: %.0f     Y: %.2f",GetRange(sln,s*10), GetPath(sln,s*10));
+		printf("\nX: %.0f     Y: %.2f", solution_get_range(solution, s*10), solution_get_path(solution, s*10));
 	}
-		
 
+  solution_free(solution);
 	
 	return 0;
 }

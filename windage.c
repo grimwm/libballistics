@@ -1,21 +1,21 @@
 // Crosswind correction functions
 #include "ballistics.h"
 
-double Windage(double WindSpeed, double Vi, double xx, double t) {
-	double Vw = WindSpeed*17.60; // Convert to inches per second.
-	return (Vw*(t-xx/Vi));
+double windage(double wind_speed, double vi, double xx, double t) {
+	double vw = wind_speed*17.60; // Convert to inches per second.
+	return (vw*(t-xx/vi));
 }
 
 // Headwind is positive at WindAngle=0
-double HeadWind(double WindSpeed, double WindAngle) {
-	double Wangle = DegtoRad(WindAngle);
-	return (cos(Wangle)*WindSpeed);
+double headwind(double wind_speed, double wind_angle) {
+	double w_angle = deg_to_rad(wind_angle);
+	return (cos(w_angle)*wind_speed);
 }
 
 // Positive is from Shooter's Right to Left (Wind from 90 degree)
-double CrossWind(double WindSpeed, double WindAngle) {
-	double Wangle = DegtoRad(WindAngle);
-	return (sin(Wangle)*WindSpeed);
+double crosswind(double wind_speed, double wind_angle) {
+	double w_angle = deg_to_rad(wind_angle);
+	return (sin(w_angle)*wind_speed);
 }
 
 

@@ -7,7 +7,7 @@ set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -finline-functions -O3")
 
 list(APPEND EXEC_SOURCES example.c)
 
-list(APPEND LIB_SOURCES angle.c atmosphere.c retard.c retrieve.c solve.c windage.c zero.c)
+list(APPEND LIB_SOURCES angle.c atmosphere.c retard.c solve.c windage.c zero.c)
 
 add_executable(example ${EXEC_SOURCES})
 target_link_libraries(example PRIVATE m ballistics)

@@ -26,15 +26,16 @@ double calcFA(double Altitude) {
 	return (1/fa);
 }
 
-double AtmCorrect(double DragCoefficient, double Altitude, double Barometer, double Temperature, double RelativeHumidity) {
+double atmosphere_correction(double drag_coefficient, double altitude, double barometer, double temperature,
+														 double relative_humidity) {
 
-	double FA = calcFA(Altitude);
-	double FT = calcFT(Temperature, Altitude);
-	double FR = calcFR(Temperature, Barometer, RelativeHumidity);
-	double FP = calcFP(Barometer);
+	double FA = calcFA(altitude);
+	double FT = calcFT(temperature, altitude);
+	double FR = calcFR(temperature, barometer, relative_humidity);
+	double FP = calcFP(barometer);
 
 	// Calculate the atmospheric correction factor
 	double CD = (FA*(1+FT-FP)*FR);
-	return DragCoefficient*CD;
+	return drag_coefficient*CD;
 }
 

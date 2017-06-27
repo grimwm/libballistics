@@ -1,6 +1,8 @@
 GNU Ballistics Library
 ======================
+
 Created by Derek Yates
+
 Updated by William Grim
 
 The GNU Ballistics Library is a C library to solve exterior ballistics problems
@@ -47,36 +49,36 @@ How to use this library
 
 	`#include <ballistics.h>`
 
-1. Declare a pointer for accessing solution data.
+1. Declare storage for accessing solution data.
 
-    `double* solution;`
+    `struct BallisticSolution* solution;`
 
-1. (Optional): Use the weather correction functions to correct a standard ballistic coefficient for non-standard conditions.
+1. **Optional**: Use the weather correction functions to correct a standard ballistic
+   coefficient for non-standard conditions.
 
-    `double bc=AtmCorrect(bc, 0, 29.59, 100,.7);`
+    `double bc = atmosphere_correction(bc, 0, 29.59, 100,.7);`
 
-1. Determine initial "zero" condition for the model using ZeroAngle() function.  This is required for establishing
-		a sight-in range for a rifle.  If you just wish to examine ballistics without regard to a sighting system,
-		it is fine to set this to zero and directly alter the shooting angle in step 5.
-		This function is provided because it is not trivial to find a good zero solution for ballistics models,
-		and a highly optimized function is needed to avoid bogging down the computer.
+1. Determine initial "zero" condition for the model using zero_angle() function.
+   This is required for establishing a sight-in range for a rifle.  If you just
+   wish to examine ballistics without regard to a sighting system, it is fine
+   to set this to zero and directly alter the shooting angle in step 5.
+   This function is provided because it is not trivial to find a good zero solution
+   for ballistics models, and a highly optimized function is needed to avoid bogging
+   down the computer.
 
-    ```
-    double zeroangle=0;
-    zeroangle=ZeroAngle(G1,0.465,2750,1.6,100,0);
-    ```
+    `double zeroangle = zero_angle(G1, 0.465, 2750, 1.6, 100, 0);`
 
-1. Generate a solution matrix tied to the pointer created in step 2.
+1. Generate a solution matrix tied to the pointer created earlier.  Memory is allocated in solve().
 
-    `k=SolveAll(G1,bc,v,sh,angle,zeroangle,windspeed,windangle,&sln);`
+    `k = solve(&solution, G1, bc, v, sh, angle, zeroangle, windspeed, windangle);`
 
 1. Access the solution using one of the access functions provided.
 
-    `printf("\nX: %.0f     Y: %.2f",GetRange(sln,10), GetPath(sln,10));`
+    `printf("\nX: %.0f     Y: %.2f",solution_get_range(solution, 10), solution_get_path(solution, 10));`
 
 1. When you are done with the solution, free the memory.
 
-    `free(sln);`
+    `solution_free(solution);`
 
 1. When building, be sure to link against *libballistics.a*.  On many linkers, this is done
    with `-lballistics`.
