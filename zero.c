@@ -1,7 +1,7 @@
 // Used to determine bore angle
 #include "ballistics.h"
 
-double ZeroAngle(int DragFunction, double DragCoefficient, double Vi, double SightHeight, double ZeroRange, double yIntercept){
+double ZeroAngle(int DragFunction, double DragCoefficient, double Vi, double SightHeight, double ZeroRange, double yIntercept) {
 
 	// Numerical Integration variables
 	double t=0;
@@ -29,13 +29,13 @@ double ZeroAngle(int DragFunction, double DragCoefficient, double Vi, double Sig
 	// the angle.  Once we are again below the correct angle, reduce the angular change by half again, and go
 	// back up.  This allows for a fast successive approximation of the correct elevation, usually within less
 	// than 20 iterations.
-	for (angle=0;quit==0;angle=angle+da){
+	for (angle=0;quit==0;angle=angle+da) {
 		vy=Vi*sin(angle);
 		vx=Vi*cos(angle);
 		Gx=GRAVITY*sin(angle);
 		Gy=GRAVITY*cos(angle);
 
-		for (t=0,x=0,y=-SightHeight/12;x<=ZeroRange*3;t=t+dt){
+		for (t=0,x=0,y=-SightHeight/12;x<=ZeroRange*3;t=t+dt) {
 			vy1=vy;
 			vx1=vx;
 			v=pow((pow(vx,2)+pow(vy,2)),0.5);
@@ -61,19 +61,17 @@ double ZeroAngle(int DragFunction, double DragCoefficient, double Vi, double Sig
 			}
 		}
 	
-		if (y>yIntercept && da>0){
+		if (y>yIntercept && da>0) {
 			da=-da/2;
 		}
 
-		if (y<yIntercept && da<0){
+		if (y<yIntercept && da<0) {
 			da=-da/2;
 		}
 
 		if (fabs(da) < MOAtoRad(0.01)) quit=1; // If our accuracy is sufficient, we can stop approximating.
 		if (angle > DegtoRad(45)) quit=1; // If we exceed the 45 degree launch angle, then the projectile just won't get there, so we stop trying.
-
 	}
-
 
 	return RadtoDeg(angle); // Convert to degrees for return value.
 }

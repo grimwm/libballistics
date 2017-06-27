@@ -2,7 +2,7 @@
 #include "ballistics.h"
 
 int SolveAll(int DragFunction, double DragCoefficient, double Vi, double SightHeight, \
-double ShootingAngle, double ZAngle, double WindSpeed, double WindAngle, double** Solution){
+double ShootingAngle, double ZAngle, double WindSpeed, double WindAngle, double** Solution) {
 
 	double* ptr = malloc(10*__BCOMP_MAXRANGE__*sizeof(double)+2);
 	
@@ -25,7 +25,7 @@ double ShootingAngle, double ZAngle, double WindSpeed, double WindAngle, double*
 	y=-SightHeight/12;
 
 	int n=0;
-	for (t=0;;t=t+dt){
+	for (t=0;;t=t+dt) {
 
 		vx1=vx, vy1=vy;	
 		v=pow(pow(vx,2)+pow(vy,2),0.5);
@@ -42,7 +42,7 @@ double ShootingAngle, double ZAngle, double WindSpeed, double WindAngle, double*
 
 
 
-		if (x/3>=n){
+		if (x/3>=n) {
 			ptr[10*n+0]=x/3;							// Range in yds
 			ptr[10*n+1]=y*12;							// Path in inches
 			ptr[10*n+2]=-RadtoMOA(atan(y/x));			// Correction in MOA

@@ -11,7 +11,7 @@
 #include <math.h>
 #include <stdlib.h>
 
-enum __DragFunctions {G1=1,G2,G3,G4,G5,G6,G7,G8};
+enum DragFunctions {G1=1,G2,G3,G4,G5,G6,G7,G8};
 
 // Angular conversion functions to make things a little easier. 
 double DegtoMOA(double deg); // Converts degrees to minutes of angle

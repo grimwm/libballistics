@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "ballistics.h"
 
-int main(void){
+int main(void) {
 	int k=0;
 	double* sln;// A pointer for receiving the ballistic solution.
 	double bc=0.5; // The ballistic coefficient for the projectile.
@@ -35,7 +35,7 @@ int main(void){
 	
 	// Now print a simple chart of X / Y trajectory spaced at 10yd increments
 	int s=0;
-	for (s=0;s<=100;s++){
+	for (s=0;s<=100;s++) {
 		printf("\nX: %.0f     Y: %.2f",GetRange(sln,s*10), GetPath(sln,s*10));
 	}
 		

@@ -1,45 +1,82 @@
-GNU Ballistics Library v 1.0 - Originally created by Derek Yates
+GNU Ballistics Library
+======================
+Created by Derek Yates
+Updated by William Grim
 
-The GNU Ballistics Library is a C library created to solve exterior ballistics problems through numerical integration.  It is a lightweight, optimized library for general purpose ballistics solutions.  It is targeted in general at small arms exterior ballistics, at ranges under 5000 yards.
+The GNU Ballistics Library is a C library to solve exterior ballistics problems
+through numerical integration.  It is a lightweight, optimized library for
+general purpose ballistics solutions.  In general, it is targeted at small
+arms exterior ballistics at ranges under 5000 yards.
 
-This library supports the standard Drag Functions (G1, G2, G3, G5, G6, G7, and G8 drag functions).
+This library supports the standard Drag Functions: G1, G2, G3, G5, G6, G7, and G8
 
+It is possible to have dozens of solutions in memory at once for comparing loads or
+different scenarios, and using this library, it should be fairly easy to create an
+excellent end-user ballistic software GUI.  The high speed solution and excellent
+accuracy are better than many commercial offerings.
 
 Exterior Ballistics Primer for Small Arms
+-----------------------------------------
+Exterior ballistic problems do not generally have algebraic solutions.
+The models are step-wise models, developed using complex doppler radar ranges.
+Exterior ballistic models attempt to describe how a projectile behaves at a
+particular velocity by relating it to a "standard" projectile, which was
+tested in depth.
 
-Exterior ballistic problems do not generally have algebraic solutions.  The models are step-wise models, developed using complex doppler radar ranges.  Exterior ballistic models attempt to describe how a projectile behaves at a particular velocity by relating it to a "standard" projectile, which was tested in depth.
+The most common drag function in use is the G1 drag function.  Virtually all
+published "ballistic coefficient" data in reloading manuals and product
+literature are G1 drag coefficients.
 
-The most common drag function in use is the G1 drag function.  Virtually all published "ballistic coefficient" data in reloading manuals and product literature are G1 drag coefficients.
+Install
+-------
 
+Assuming you start in the directory containing the library source code, the most
+basic way to build and install is with these steps:
 
-How to use this library:
+    srcdir=$(pwd)
+    mkdir ../build
+    cd ../build
+    cmake $srcdir
+    make
+    sudo make install
 
-Step 1:  Link to the library.
-	#include "ballistics.h"
+How to use this library
+-----------------------
 
-Step 2:  Declare a pointer for accessing solution data.
-	double* solution;
+1. Include the library header.
 
-Step 3 (Optional):  Use the weather correction functions to correct a standard ballistic coefficient for non-standard conditions.
-	double bc=AtmCorrect(bc, 0, 29.59, 100,.7);
+	`#include <ballistics.h>`
 
-Step 4:  Determine initial "zero" condition for the model using ZeroAngle() function.  This is required for establishing
+1. Declare a pointer for accessing solution data.
+
+    `double* solution;`
+
+1. (Optional): Use the weather correction functions to correct a standard ballistic coefficient for non-standard conditions.
+
+    `double bc=AtmCorrect(bc, 0, 29.59, 100,.7);`
+
+1. Determine initial "zero" condition for the model using ZeroAngle() function.  This is required for establishing
 		a sight-in range for a rifle.  If you just wish to examine ballistics without regard to a sighting system,
 		it is fine to set this to zero and directly alter the shooting angle in step 5.
 		This function is provided because it is not trivial to find a good zero solution for ballistics models,
 		and a highly optimized function is needed to avoid bogging down the computer.
-	double zeroangle=0;
-	zeroangle=ZeroAngle(G1,0.465,2750,1.6,100,0);
 
-Step 5:  Generate a solution matrix tied to the pointer created in step 2.
-	k=SolveAll(G1,bc,v,sh,angle,zeroangle,windspeed,windangle,&sln);
+    ```
+    double zeroangle=0;
+    zeroangle=ZeroAngle(G1,0.465,2750,1.6,100,0);
+    ```
 
-Step 6:  Access the solution using one of the access functions provided.
-	printf("\nX: %.0f     Y: %.2f",GetRange(sln,10), GetPath(sln,10));
+1. Generate a solution matrix tied to the pointer created in step 2.
 
-Step 7:  When you are done with the solution, free the memory.
-	free(sln);
+    `k=SolveAll(G1,bc,v,sh,angle,zeroangle,windspeed,windangle,&sln);`
 
+1. Access the solution using one of the access functions provided.
 
+    `printf("\nX: %.0f     Y: %.2f",GetRange(sln,10), GetPath(sln,10));`
 
-It is possible to have dozens of solutions open at once for comparing loads or different scenarios.  Using this library it should be fairly easy to create an excellent end-user ballistic software GUI.  The high speed solution and excellent accuracy are better than many commercial offerings.
+1. When you are done with the solution, free the memory.
+
+    `free(sln);`
+
+1. When building, be sure to link against *libballistics.a*.  On many linkers, this is done
+   with `-lballistics`.

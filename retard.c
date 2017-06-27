@@ -1,14 +1,13 @@
 // G-function retardations
 #include "ballistics.h"
 
-double retard(int DragFunction, double DragCoefficient, double Velocity){
+double retard(int DragFunction, double DragCoefficient, double Velocity) {
 
-//	printf("DF: %d, CD: %f, V: %f,);
-
-	double vp=Velocity;	
+	double vp=Velocity;
 	double val=-1;
-	double A=-1;
-	double M=-1;
+	double A=-1; // acceleration
+	double M=-1; // mass
+
 	switch(DragFunction) {
 		case G1:
 			if (vp > 4230) { A = 1.477404177730177e-04; M = 1.9565; }
@@ -65,13 +64,13 @@ double retard(int DragFunction, double DragCoefficient, double Velocity){
 			break;
 	
 		case G5:
-			if (vp> 1730 ){ A = 7.24854775171929e-03; M = 1.41538574492812; }
-			else if (vp> 1228 ){ A = 3.50563361516117e-05; M = 2.13077307854948; }
-			else if (vp> 1116 ){ A = 1.84029481181151e-13; M = 4.81927320350395; }
-			else if (vp> 1004 ){ A = 1.34713064017409e-22; M = 7.8100555281422 ; }
-			else if (vp>  837 ){ A = 1.03965974081168e-07; M = 2.84204791809926; }
-			else if (vp>  335 ){ A = 1.09301593869823e-04; M = 1.81096361579504; }
-			else if (vp>    0 ){ A = 3.51963178524273e-05; M = 2.00477856801111; }	
+			if (vp> 1730 ) { A = 7.24854775171929e-03; M = 1.41538574492812; }
+			else if (vp> 1228 ) { A = 3.50563361516117e-05; M = 2.13077307854948; }
+			else if (vp> 1116 ) { A = 1.84029481181151e-13; M = 4.81927320350395; }
+			else if (vp> 1004 ) { A = 1.34713064017409e-22; M = 7.8100555281422 ; }
+			else if (vp>  837 ) { A = 1.03965974081168e-07; M = 2.84204791809926; }
+			else if (vp>  335 ) { A = 1.09301593869823e-04; M = 1.81096361579504; }
+			else if (vp>    0 ) { A = 3.51963178524273e-05; M = 2.00477856801111; }
 			break;
 	
 		case G6:
@@ -107,13 +106,14 @@ double retard(int DragFunction, double DragCoefficient, double Velocity){
 		
 		default:
 			break;
-		
 	}
 
-	if (A!=-1 && M!=-1 && vp>0 && vp<4500){
+	if (A!=-1 && M!=-1 && vp>0 && vp<4500) {
 		val=A*pow(vp,M)/DragCoefficient;
 		return val;
 	}
-	else return -1;
+	else {
+		return -1;
+	}
 }
 
