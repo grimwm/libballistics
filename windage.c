@@ -15,7 +15,7 @@
  */
 
 // Crosswind correction functions
-#include "ballistics.h"
+#include "ballistics/ballistics.h"
 
 #include <math.h>
 

@@ -16,7 +16,7 @@
 
 #pragma once
 
-#include "dragfunction.h"
+#include "drag.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -29,53 +29,53 @@ struct PBR;
 
 /**
  * The near-side of the ballistic trajectory where scope and projectile meet (center-mass).
- * @param solution
+ * @param pbr
  * @return near zero in yards
  */
-int pbr_get_near_zero_yards(struct PBR* solution);
+int PBR_get_near_zero_yards(struct PBR* pbr);
 
 /**
  * The far-side of the ballistic trajectory where scope and projectile meet (center-mass).
- * @param solution
+ * @param pbr
  * @return far zero in yards
  */
-int pbr_get_far_zero_yards(struct PBR* solution);
+int PBR_get_far_zero_yards(struct PBR* pbr);
 
 /**
  * The minimum distance your target can be for you to hit the target area.
- * @param solution
+ * @param pbr
  * @return
  */
-int pbr_get_min_pbr_yards(struct PBR* solution);
+int PBR_get_min_PBR_yards(struct PBR* pbr);
 
 /**
  * The maximum distance your target can be for you to hit the target area.
- * @param solution
+ * @param pbr
  * @return max distance in yards
  */
-int pbr_get_max_pbr_yards(struct PBR* solution);
+int PBR_get_max_PBR_yards(struct PBR* pbr);
 
 /**
  * Tells you how to sight in your scope at 100 yards to make the PBR work.
- * @param solution
+ * @param pbr
  * @return positive values are how many inches above center your bullets should land; negative values are below center
  */
-int pbr_get_sight_in_at_100yards(struct PBR* solution);
+int PBR_get_sight_in_at_100yards(struct PBR* pbr);
 
-void pbr_free(struct PBR* solution);
+void PBR_free(struct PBR* pbr);
 
 /**
  * Solves for the maximum Point blank range and associated details.
- * @param solution         a pointer to the solution's results
+ * @param pbr              a pointer to the pbr's results
  * @param drag_function    G1, G2, G3, G5, G6, G7, or G8
  * @param drag_coefficient The coefficient of drag for the projectile you wish to model.
  * @param vi               The projectile initial velocity.
  * @param sight_height     The height of the sighting system above the bore centerline.
                            Most scopes are in the 1.5"-2.0" range.
  * @param vital_size
- * @return 0 if solution exists, -1 for any errors
+ * @return 0 if pbr exists, -1 for any errors
  */
-int pbr_solve(struct PBR** solution, DragFunction drag_function, double drag_coefficient, double vi,
+int PBR_solve(struct PBR** pbr, DragFunction drag_function, double drag_coefficient, double vi,
               double sight_height, double vital_size);
 
 #ifdef __cplusplus

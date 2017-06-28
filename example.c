@@ -15,11 +15,11 @@
  */
 
 #include <stdio.h>
-#include "ballistics.h"
+#include "ballistics/ballistics.h"
 
 int main(void) {
 	int k=0;
-	struct BallisticsSolutions* solution;
+	struct Ballistics* solution;
 	double bc=0.5; // The ballistic coefficient for the projectile.
 	double v=1200; // Intial velocity, in ft/s
 	double sh=1.6; // The Sight height over bore, in inches.
@@ -46,15 +46,15 @@ int main(void) {
 	// Now we have everything needed to generate a full solution.
 	// So we do.  The solution is stored in the pointer "sln" passed as the last argument.
 	// k has the number of yards the solution is valid for, also the number of rows in the solution.
-	k = solve(&solution, G1, bc, v, sh, angle, zeroangle, windspeed, windangle);
+	k = Ballistics_solve(&solution, G1, bc, v, sh, angle, zeroangle, windspeed, windangle);
 	
 	// Now print a simple chart of X / Y trajectory spaced at 10yd increments
 	int s=0;
 	for (s=0;s<=100;s++) {
-		printf("\nX: %.0f     Y: %.2f", solution_get_range(solution, s*10), solution_get_path(solution, s*10));
+		printf("\nX: %.0f     Y: %.2f", Ballistics_get_range(solution, s*10), Ballistics_get_path(solution, s*10));
 	}
 
-  solution_free(solution);
+  Ballistics_free(solution);
 	
 	return 0;
 }

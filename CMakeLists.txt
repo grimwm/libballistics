@@ -10,7 +10,7 @@ set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -finline-functions -O3")
 
 list(APPEND EXEC_SOURCES example.c)
 
-list(APPEND LIB_SOURCES angle.c atmosphere.c retard.c solve.c windage.c zero.c)
+list(APPEND LIB_SOURCES angle.c atmosphere.c retard.c solve.c windage.c)
 
 add_executable(example ${EXEC_SOURCES})
 target_link_libraries(example PRIVATE m ballistics)
@@ -20,7 +20,7 @@ add_library(ballistics STATIC ${LIB_SOURCES})
 target_link_libraries(ballistics PRIVATE m)
 set_target_properties(ballistics PROPERTIES LINK_FLAGS "-Wl,--whole-archive")
 install(TARGETS ballistics DESTINATION lib)
-install(FILES include/ballistics.h DESTINATION include)
+install(DIRECTORY include/ballistics DESTINATION include)
 
 # To workaround the fact CLion doesn't have a way to do `make install`:
 add_custom_target(install_${PROJECT_NAME}

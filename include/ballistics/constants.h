@@ -20,10 +20,9 @@
 extern "C" {
 #endif
 
-typedef enum {
-  G1 = 1, G2, G3, G4, G5, G6, G7, G8
-} DragFunction;
+#define BALLISTICS_COMPUTATION_MAX_YARDS 50000
+#define GRAVITY (-32.194)
 
 #ifdef __cplusplus
-} // extern "C"
+}
 #endif

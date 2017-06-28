@@ -15,7 +15,7 @@
  */
 
 // G-function retardations
-#include "ballistics.h"
+#include "ballistics/ballistics.h"
 
 #include <math.h>
 
