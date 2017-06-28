@@ -221,9 +221,9 @@ int pbr_sight_in_at_100yards(struct PBRSolution* solution);
  * @param vital_size
  * @return 0 if solution exists, -1 for any errors
  */
-int pbr(struct PBRSolution* solution, DragFunction drag_function, double drag_coefficient, double vi, double sight_height,
+int pbr(struct PBRSolution** solution, DragFunction drag_function, double drag_coefficient, double vi, double sight_height,
         double vital_size);
 
 #ifdef __cplusplus
-}
+} // extern "C"
 #endif

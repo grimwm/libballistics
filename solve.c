@@ -213,7 +213,7 @@ int pbr_sight_in_at_100yards(struct PBRSolution* solution) {
   return solution->sight_in_at_100yards;
 }
 
-int pbr(struct PBRSolution* solution, DragFunction drag_function, double drag_coefficient, double vi, double sight_height,
+int pbr(struct PBRSolution** solution, DragFunction drag_function, double drag_coefficient, double vi, double sight_height,
         double vital_size) {
 
 	double t=0;
@@ -343,11 +343,12 @@ int pbr(struct PBRSolution* solution, DragFunction drag_function, double drag_co
 		if (fabs(Step)<(0.01/60)) quit=1;
 	}
 
-  solution->near_zero_yards = (int)(zero/3);
-	solution->far_zero_yards = (int)(farzero/3);
-	solution->min_pbr_yards = (int)(min_pbr_range/3);
-	solution->max_pbr_yards = (int)(max_pbr_range/3);
-	solution->sight_in_at_100yards = tin100;
+  *solution = malloc(sizeof(struct PBRSolution));
+  (*solution)->near_zero_yards = (int)(zero/3);
+  (*solution)->far_zero_yards = (int)(farzero/3);
+  (*solution)->min_pbr_yards = (int)(min_pbr_range/3);
+  (*solution)->max_pbr_yards = (int)(max_pbr_range/3);
+  (*solution)->sight_in_at_100yards = tin100;
 
 	return 0;
 }

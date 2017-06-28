@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.1)
 
 find_package(GTest REQUIRED)
 include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
+include_directories(..)
 
 add_executable(runTests
         pbr_check.cpp)
