@@ -35,4 +35,3 @@ double rad_to_deg(double rad) {
 double rad_to_moa(double rad) {
 	return rad*60*180/M_PI;
 }
-

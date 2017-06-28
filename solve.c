@@ -32,6 +32,11 @@ struct Ballistics {
   double vy; // velocity of projectile perpendicular to the bore direction
 };
 
+struct BallisticsSolutions {
+  struct Ballistics *yardages;
+  int max_yardage;
+};
+
 struct BallisticsSolutions* solution_alloc() {
   struct BallisticsSolutions* sln = malloc(sizeof(struct BallisticsSolutions));
   sln->yardages = malloc(sizeof(struct Ballistics) * BALLISTICS_COMPUTATION_MAX_YARDS);
@@ -107,7 +112,7 @@ double solution_get_vy(struct BallisticsSolutions* solution, int yardage) {
   else return 0;
 }
 
-int solve(struct BallisticsSolutions** solution, int drag_function, double drag_coefficient, double vi,
+int solve(struct BallisticsSolutions** solution, DragFunction drag_function, double drag_coefficient, double vi,
           double sight_height, double shooting_angle, double zero_angle, double wind_speed, double wind_angle) {
 
 	double t=0;
@@ -174,7 +179,41 @@ int solve(struct BallisticsSolutions** solution, int drag_function, double drag_
 	return n;
 }
 
-int pbr(struct PBRSolution *solution, int drag_function, double drag_coefficient, double vi, double sight_height,
+/**
+ * A description of a solution to point-blank-range calculations.
+ */
+struct PBRSolution {
+  int near_zero_yards; // nearest scope/projectile intersection
+  int far_zero_yards;  // furthest scope/projectile intersection
+
+  int min_pbr_yards;   // nearest target can be for a vitals hit when aiming at center of vitals
+  int max_pbr_yards;   // furthest target can be for a vitals hit when aiming at center of vitals
+
+  // Sight-in at 100 yards, in 100ths of an inch.  Positive is above center; negative is below.
+  int sight_in_at_100yards;
+};
+
+int pbr_get_near_zero_yards(struct PBRSolution* solution) {
+  return solution->near_zero_yards;
+}
+
+int pbr_get_far_zero_yards(struct PBRSolution* solution) {
+  return solution->far_zero_yards;
+}
+
+int pbr_get_min_pbr_yards(struct PBRSolution* solution) {
+  return solution->min_pbr_yards;
+}
+
+int pbr_get_max_pbr_yards(struct PBRSolution* solution) {
+  return solution->max_pbr_yards;
+}
+
+int pbr_sight_in_at_100yards(struct PBRSolution* solution) {
+  return solution->sight_in_at_100yards;
+}
+
+int pbr(struct PBRSolution* solution, DragFunction drag_function, double drag_coefficient, double vi, double sight_height,
         double vital_size) {
 
 	double t=0;

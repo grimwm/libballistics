@@ -54,4 +54,3 @@ double atmosphere_correction(double drag_coefficient, double altitude, double ba
 	double CD = (FA*(1+FT-FP)*FR);
 	return drag_coefficient*CD;
 }
-

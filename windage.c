@@ -33,5 +33,3 @@ double crosswind(double wind_speed, double wind_angle) {
 	double w_angle = deg_to_rad(wind_angle);
 	return (sin(w_angle)*wind_speed);
 }
-
-

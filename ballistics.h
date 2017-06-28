@@ -29,11 +29,14 @@ extern "C" {
 #include <math.h>
 #include <stdlib.h>
 
-enum DragFunctions {
+typedef enum {
   G1 = 1, G2, G3, G4, G5, G6, G7, G8
-};
+} DragFunction;
 
-// Angular conversion functions to make things a little easier. 
+struct BallisticsSolutions;
+struct PBRSolution;
+
+// Angular conversion functions to make things a little easier.
 double deg_to_moa(double deg); // Converts degrees to minutes of angle
 double deg_to_rad(double deg); // Converts degrees to radians
 double moa_to_deg(double moa); // Converts minutes of angle to degrees
@@ -45,10 +48,10 @@ double rad_to_moa(double rad); // Converts radiants to minutes of angle
  * A function to calculate ballistic retardation values based on standard drag functions.
  * @param drag_function    G1, G2, G3, G4, G5, G6, G7, or G8
  * @param drag_coefficient The coefficient of drag for the projectile for the given drag function.
- * @param Vi              The Velocity of the projectile.
+ * @param vp               The Velocity of the projectile.
  * @return The function returns the projectile drag retardation velocity, in ft/s per second.
  */
-double retard(int drag_function, double drag_coefficient, double Vi);
+double retard(DragFunction drag_function, double drag_coefficient, double vp);
 
 /**
  * A function to correct a "standard" Drag Coefficient for differing atmospheric conditions.
@@ -114,36 +117,31 @@ double crosswind(double wind_speed, double wind_angle);
  *                         to sight your rifle in 1.5" high at 100 yds, then you would set yIntercept to 1.5, and ZeroRange to 100
  * @return The angle of the bore relative to the sighting system, in degrees.
  */
-double zero_angle(int drag_function, double drag_coefficient, double vi, double sight_height, double zero_range,
+double zero_angle(DragFunction drag_function, double drag_coefficient, double vi, double sight_height, double zero_range,
                   double y_intercept);
 
-struct Ballistics;
-struct BallisticsSolutions {
-  struct Ballistics *yardages;
-  int max_yardage;
-};
-
 // Functions for retrieving data from a solution generated with solve()
-void solution_free(struct BallisticsSolutions *solution);
+void solution_free(struct BallisticsSolutions* solution);
 
-double solution_get_range(struct BallisticsSolutions *solution, int yardage); // Returns range, in yards.
-double solution_get_path(struct BallisticsSolutions *solution,
-                         int yardage); // Returns projectile path, in inches, relative to the line of sight.
-double solution_get_moa(struct BallisticsSolutions *solution,
-                        int yardage); // Returns an estimated elevation correction for achieving a zero at this range.
+// Returns range, in yards.
+double solution_get_range(struct BallisticsSolutions* solution, int yardage);
+// Returns projectile path, in inches, relative to the line of sight.
+double solution_get_path(struct BallisticsSolutions* solution, int yardage);
+// Returns an estimated elevation correction for achieving a zero at this range.
 // this is useful for "click charts" and the like.
-double solution_get_time(struct BallisticsSolutions *solution,
-                         int yardage); // Returns the projectile's time of flight to this range.
-double solution_get_windage(struct BallisticsSolutions *solution,
-                            int yardage); // Returns the windage correction in inches required to achieve zero at this range.
-double solution_get_windage_moa(struct BallisticsSolutions *solution,
-                                int yardage); // Returns an approximate windage correction in MOA to achieve a zero at this range.
-double solution_get_velocity(struct BallisticsSolutions *solution,
-                             int yardage); // Returns the projectile's total velocity (Vector product of Vx and Vy)
-double solution_get_vx(struct BallisticsSolutions *solution,
-                       int yardage); // Returns the velocity of the projectile in the bore direction.
-double solution_get_vy(struct BallisticsSolutions *solution,
-                       int yardage); // Returns the velocity of the projectile perpendicular to the bore direction.
+double solution_get_moa(struct BallisticsSolutions* solution, int yardage);
+// Returns the projectile's time of flight to this range.
+double solution_get_time(struct BallisticsSolutions* solution, int yardage);
+// Returns the windage correction in inches required to achieve zero at this range.
+double solution_get_windage(struct BallisticsSolutions* solution, int yardage);
+// Returns an approximate windage correction in MOA to achieve a zero at this range.
+double solution_get_windage_moa(struct BallisticsSolutions* solution, int yardage);
+// Returns the projectile's total velocity (Vector product of Vx and Vy)
+double solution_get_velocity(struct BallisticsSolutions* solution, int yardage);
+// Returns the velocity of the projectile in the bore direction.
+double solution_get_vx(struct BallisticsSolutions* solution, int yardage);
+// Returns the velocity of the projectile perpendicular to the bore direction.
+double solution_get_vy(struct BallisticsSolutions* solution, int yardage);
 
 // For very steep shooting angles, vx can actually become what you would think of as vy relative to the ground,
 // because vx is referencing the bore's axis.  All computations are carried out relative to the bore's axis, and
@@ -174,22 +172,43 @@ double solution_get_vy(struct BallisticsSolutions *solution,
  *         solution.  This also indicates the maximum number of rows in the solution matrix,
  *         and should not be exceeded in order to avoid a memory segmentation fault.
  */
-int solve(struct BallisticsSolutions **solution, int drag_function, double drag_coefficient, double vi,
+int solve(struct BallisticsSolutions** solution, DragFunction drag_function, double drag_coefficient, double vi,
           double sight_height, double shooting_angle, double zero_angle, double wind_speed, double wind_angle);
 
 /**
- * A description of a solution to point-blank-range calculations.
+ * The near-side of the ballistic trajectory where scope and projectile meet (center-mass).
+ * @param solution
+ * @return near zero in yards
  */
-struct PBRSolution {
-  int near_zero_yards; // nearest scope/projectile intersection
-  int far_zero_yards;  // furthest scope/projectile intersection
+int pbr_get_near_zero_yards(struct PBRSolution* solution);
 
-  int min_pbr_yards;   // nearest target can be for a vitals hit when aiming at center of vitals
-  int max_pbr_yards;   // furthest target can be for a vitals hit when aiming at center of vitals
+/**
+ * The far-side of the ballistic trajectory where scope and projectile meet (center-mass).
+ * @param solution
+ * @return far zero in yards
+ */
+int pbr_get_far_zero_yards(struct PBRSolution* solution);
 
-  // Sight-in at 100 yards, in 100ths of an inch.  Positive is above center; negative is below.
-  int sight_in_at_100yards;
-};
+/**
+ * The minimum distance your target can be for you to hit the target area.
+ * @param solution
+ * @return
+ */
+int pbr_get_min_pbr_yards(struct PBRSolution* solution);
+
+/**
+ * The maximum distance your target can be for you to hit the target area.
+ * @param solution
+ * @return max distance in yards
+ */
+int pbr_get_max_pbr_yards(struct PBRSolution* solution);
+
+/**
+ * Tells you how to sight in your scope at 100 yards to make the PBR work.
+ * @param solution
+ * @return positive values are how many inches above center your bullets should land; negative values are below center
+ */
+int pbr_sight_in_at_100yards(struct PBRSolution* solution);
 
 /**
  * Solves for the maximum Point blank range and associated details.
@@ -202,7 +221,7 @@ struct PBRSolution {
  * @param vital_size
  * @return 0 if solution exists, -1 for any errors
  */
-int pbr(struct PBRSolution *solution, int drag_function, double drag_coefficient, double vi, double sight_height,
+int pbr(struct PBRSolution* solution, DragFunction drag_function, double drag_coefficient, double vi, double sight_height,
         double vital_size);
 
 #ifdef __cplusplus

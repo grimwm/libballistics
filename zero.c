@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-// Used to determine bore angle
 #include "ballistics.h"
 
-double zero_angle(int drag_function, double drag_coefficient, double vi, double sight_height, double zero_range,
+// Used to determine bore angle
+double zero_angle(DragFunction drag_function, double drag_coefficient, double vi, double sight_height, double zero_range,
 									double y_intercept) {
 
 	// Numerical Integration variables
@@ -92,5 +92,3 @@ double zero_angle(int drag_function, double drag_coefficient, double vi, double 
 
 	return rad_to_deg(angle); // Convert to degrees for return value.
 }
-
-
