@@ -16,6 +16,8 @@
 
 #include "ballistics.h"
 
+#include <math.h>
+
 // Used to determine bore angle
 double zero_angle(DragFunction drag_function, double drag_coefficient, double vi, double sight_height, double zero_range,
 									double y_intercept) {

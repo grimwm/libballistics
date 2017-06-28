@@ -17,6 +17,9 @@
 // Used to solve ballistic problems
 #include "ballistics.h"
 
+#include <stdlib.h>
+#include <math.h>
+
 /**
  * A ballistics solution for a projectile at a certain yardage.
  */
@@ -217,8 +220,6 @@ void pbr_free(struct PBR* pbr) {
   free(pbr);
 }
 
-#define PBR_E_OUT_OF_RANGE -1
-#define PBR_E_TOO_FAST_VY  -2
 int pbr_solve(struct PBR** solution, DragFunction drag_function, double drag_coefficient, double vi,
               double sight_height, double vital_size) {
 

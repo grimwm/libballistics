@@ -17,6 +17,8 @@
 // G-function retardations
 #include "ballistics.h"
 
+#include <math.h>
+
 double retard(DragFunction drag_function, double drag_coefficient, double vp) {
 
 	double acceleration=-1;

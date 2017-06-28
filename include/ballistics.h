@@ -26,15 +26,12 @@ extern "C" {
 #define BALLISTICS_COMPUTATION_MAX_YARDS 50000
 #define GRAVITY (-32.194)
 
-#include <math.h>
-#include <stdlib.h>
+//#include <math.h>
+//#include <stdlib.h>
 
-typedef enum {
-  G1 = 1, G2, G3, G4, G5, G6, G7, G8
-} DragFunction;
+#include "pbr.h"
 
 struct BallisticsSolutions;
-struct PBR;
 
 // Angular conversion functions to make things a little easier.
 double deg_to_moa(double deg); // Converts degrees to minutes of angle
@@ -174,57 +171,6 @@ double solution_get_vy(struct BallisticsSolutions* solution, int yardage);
  */
 int solve(struct BallisticsSolutions** solution, DragFunction drag_function, double drag_coefficient, double vi,
           double sight_height, double shooting_angle, double zero_angle, double wind_speed, double wind_angle);
-
-/**
- * The near-side of the ballistic trajectory where scope and projectile meet (center-mass).
- * @param solution
- * @return near zero in yards
- */
-int pbr_get_near_zero_yards(struct PBR* solution);
-
-/**
- * The far-side of the ballistic trajectory where scope and projectile meet (center-mass).
- * @param solution
- * @return far zero in yards
- */
-int pbr_get_far_zero_yards(struct PBR* solution);
-
-/**
- * The minimum distance your target can be for you to hit the target area.
- * @param solution
- * @return
- */
-int pbr_get_min_pbr_yards(struct PBR* solution);
-
-/**
- * The maximum distance your target can be for you to hit the target area.
- * @param solution
- * @return max distance in yards
- */
-int pbr_get_max_pbr_yards(struct PBR* solution);
-
-/**
- * Tells you how to sight in your scope at 100 yards to make the PBR work.
- * @param solution
- * @return positive values are how many inches above center your bullets should land; negative values are below center
- */
-int pbr_get_sight_in_at_100yards(struct PBR* solution);
-
-void pbr_free(struct PBR* solution);
-
-/**
- * Solves for the maximum Point blank range and associated details.
- * @param solution         a pointer to the solution's results
- * @param drag_function    G1, G2, G3, G5, G6, G7, or G8
- * @param drag_coefficient The coefficient of drag for the projectile you wish to model.
- * @param vi               The projectile initial velocity.
- * @param sight_height     The height of the sighting system above the bore centerline.
-                           Most scopes are in the 1.5"-2.0" range.
- * @param vital_size
- * @return 0 if solution exists, -1 for any errors
- */
-int pbr_solve(struct PBR** solution, DragFunction drag_function, double drag_coefficient, double vi,
-              double sight_height, double vital_size);
 
 #ifdef __cplusplus
 } // extern "C"
