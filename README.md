@@ -8,7 +8,7 @@ Updated by William Grim
 The GNU Ballistics Library is a C library to solve exterior ballistics problems
 through numerical integration.  It is a lightweight, optimized library for
 general purpose ballistics solutions.  In general, it is targeted at small
-arms exterior ballistics at ranges under 5000 yards.
+arms exterior ballistics at ranges under 50,000 yards.
 
 This library supports the standard Drag Functions: G1, G2, G3, G5, G6, G7, and G8
 
@@ -58,7 +58,7 @@ How to use this library
 
     `double bc = atmosphere_correction(bc, 0, 29.59, 100,.7);`
 
-1. Determine initial "zero" condition for the model using zero_angle() function.
+1. Determine initial "zero" condition for the model using `zero_angle()` function.
    This is required for establishing a sight-in range for a rifle.  If you just
    wish to examine ballistics without regard to a sighting system, it is fine
    to set this to zero and directly alter the shooting angle in step 5.
@@ -68,7 +68,7 @@ How to use this library
 
     `double zeroangle = zero_angle(G1, 0.465, 2750, 1.6, 100, 0);`
 
-1. Generate a solution matrix tied to the pointer created earlier.  Memory is allocated in solve().
+1. Generate a solution matrix tied to the pointer created earlier.  Memory is allocated in `solve()`.
 
     `k = solve(&solution, G1, bc, v, sh, angle, zeroangle, windspeed, windangle);`
 
