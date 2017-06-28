@@ -182,7 +182,7 @@ int solve(struct BallisticsSolutions** solution, DragFunction drag_function, dou
 /**
  * A description of a solution to point-blank-range calculations.
  */
-struct PBRSolution {
+struct PBR {
   int near_zero_yards; // nearest scope/projectile intersection
   int far_zero_yards;  // furthest scope/projectile intersection
 
@@ -193,28 +193,34 @@ struct PBRSolution {
   int sight_in_at_100yards;
 };
 
-int pbr_get_near_zero_yards(struct PBRSolution* solution) {
-  return solution->near_zero_yards;
+int pbr_get_near_zero_yards(struct PBR* pbr) {
+  return pbr->near_zero_yards;
 }
 
-int pbr_get_far_zero_yards(struct PBRSolution* solution) {
-  return solution->far_zero_yards;
+int pbr_get_far_zero_yards(struct PBR* pbr) {
+  return pbr->far_zero_yards;
 }
 
-int pbr_get_min_pbr_yards(struct PBRSolution* solution) {
-  return solution->min_pbr_yards;
+int pbr_get_min_pbr_yards(struct PBR* pbr) {
+  return pbr->min_pbr_yards;
 }
 
-int pbr_get_max_pbr_yards(struct PBRSolution* solution) {
-  return solution->max_pbr_yards;
+int pbr_get_max_pbr_yards(struct PBR* pbr) {
+  return pbr->max_pbr_yards;
 }
 
-int pbr_sight_in_at_100yards(struct PBRSolution* solution) {
-  return solution->sight_in_at_100yards;
+int pbr_get_sight_in_at_100yards(struct PBR* pbr) {
+  return pbr->sight_in_at_100yards;
 }
 
-int pbr(struct PBRSolution** solution, DragFunction drag_function, double drag_coefficient, double vi, double sight_height,
-        double vital_size) {
+void pbr_free(struct PBR* pbr) {
+  free(pbr);
+}
+
+#define PBR_E_OUT_OF_RANGE -1
+#define PBR_E_TOO_FAST_VY  -2
+int pbr_solve(struct PBR** solution, DragFunction drag_function, double drag_coefficient, double vi,
+              double sight_height, double vital_size) {
 
 	double t=0;
 	double dt=0.5/vi;
@@ -246,6 +252,8 @@ int pbr(struct PBRSolution** solution, DragFunction drag_function, double drag_c
 	double Gy=GRAVITY*cos(deg_to_rad((ShootingAngle + ZAngle)));
 	double Gx=GRAVITY*sin(deg_to_rad((ShootingAngle + ZAngle)));
 
+  int status = 0;
+
 	while (quit==0){
 
 		Gy=GRAVITY*cos(deg_to_rad((ShootingAngle + ZAngle)));
@@ -269,7 +277,9 @@ int pbr(struct PBRSolution** solution, DragFunction drag_function, double drag_c
 		tinkeep=0;
 
 		int n=0;
-		for (t=0;;t=t+dt){
+		for (t=0;;t=t+dt) {
+
+      status = 0;
 
 			vx1=vx, vy1=vy;
 			v=pow(pow(vx,2)+pow(vy,2),0.5);
@@ -314,8 +324,13 @@ int pbr(struct PBRSolution** solution, DragFunction drag_function, double drag_c
 			}
 
 
-			if (fabs(vy)>fabs(3*vx) || n>=BALLISTICS_COMPUTATION_MAX_YARDS+1) {
-        return -1;
+			if (fabs(vy)>fabs(3*vx)) {
+        status = PBR_E_TOO_FAST_VY;
+        break;
+      }
+      if (n>=BALLISTICS_COMPUTATION_MAX_YARDS+1) {
+        status = PBR_E_OUT_OF_RANGE;
+        break;
       }
 
 			// The PBR will be maximum at the point where the vertex is 1/2 vital zone size.
@@ -343,7 +358,11 @@ int pbr(struct PBRSolution** solution, DragFunction drag_function, double drag_c
 		if (fabs(Step)<(0.01/60)) quit=1;
 	}
 
-  *solution = malloc(sizeof(struct PBRSolution));
+  if (status) {
+    return status;
+  }
+
+  *solution = malloc(sizeof(struct PBR));
   (*solution)->near_zero_yards = (int)(zero/3);
   (*solution)->far_zero_yards = (int)(farzero/3);
   (*solution)->min_pbr_yards = (int)(min_pbr_range/3);

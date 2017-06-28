@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.1)
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 project(ballistics C CXX)
 
+include_directories(include)
 add_subdirectory(test)
 
 set(CMAKE_CXX_STANDARD 11)
@@ -19,7 +20,7 @@ add_library(ballistics STATIC ${LIB_SOURCES})
 target_link_libraries(ballistics PRIVATE m)
 set_target_properties(ballistics PROPERTIES LINK_FLAGS "-Wl,--whole-archive")
 install(TARGETS ballistics DESTINATION lib)
-install(FILES ballistics.h DESTINATION include)
+install(FILES include/ballistics.h DESTINATION include)
 
 # To workaround the fact CLion doesn't have a way to do `make install`:
 add_custom_target(install_${PROJECT_NAME}

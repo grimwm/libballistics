@@ -34,7 +34,7 @@ typedef enum {
 } DragFunction;
 
 struct BallisticsSolutions;
-struct PBRSolution;
+struct PBR;
 
 // Angular conversion functions to make things a little easier.
 double deg_to_moa(double deg); // Converts degrees to minutes of angle
@@ -180,35 +180,37 @@ int solve(struct BallisticsSolutions** solution, DragFunction drag_function, dou
  * @param solution
  * @return near zero in yards
  */
-int pbr_get_near_zero_yards(struct PBRSolution* solution);
+int pbr_get_near_zero_yards(struct PBR* solution);
 
 /**
  * The far-side of the ballistic trajectory where scope and projectile meet (center-mass).
  * @param solution
  * @return far zero in yards
  */
-int pbr_get_far_zero_yards(struct PBRSolution* solution);
+int pbr_get_far_zero_yards(struct PBR* solution);
 
 /**
  * The minimum distance your target can be for you to hit the target area.
  * @param solution
  * @return
  */
-int pbr_get_min_pbr_yards(struct PBRSolution* solution);
+int pbr_get_min_pbr_yards(struct PBR* solution);
 
 /**
  * The maximum distance your target can be for you to hit the target area.
  * @param solution
  * @return max distance in yards
  */
-int pbr_get_max_pbr_yards(struct PBRSolution* solution);
+int pbr_get_max_pbr_yards(struct PBR* solution);
 
 /**
  * Tells you how to sight in your scope at 100 yards to make the PBR work.
  * @param solution
  * @return positive values are how many inches above center your bullets should land; negative values are below center
  */
-int pbr_sight_in_at_100yards(struct PBRSolution* solution);
+int pbr_get_sight_in_at_100yards(struct PBR* solution);
+
+void pbr_free(struct PBR* solution);
 
 /**
  * Solves for the maximum Point blank range and associated details.
@@ -221,8 +223,8 @@ int pbr_sight_in_at_100yards(struct PBRSolution* solution);
  * @param vital_size
  * @return 0 if solution exists, -1 for any errors
  */
-int pbr(struct PBRSolution** solution, DragFunction drag_function, double drag_coefficient, double vi, double sight_height,
-        double vital_size);
+int pbr_solve(struct PBR** solution, DragFunction drag_function, double drag_coefficient, double vi,
+              double sight_height, double vital_size);
 
 #ifdef __cplusplus
 } // extern "C"
