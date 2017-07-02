@@ -19,7 +19,7 @@
 
 int main(void) {
 	int k=0;
-	struct Ballistics* solution;
+	Ballistics* solution;
 	double bc=0.5; // The ballistic coefficient for the projectile.
 	double v=1200; // Intial velocity, in ft/s
 	double sh=1.6; // The Sight height over bore, in inches.
@@ -50,8 +50,8 @@ int main(void) {
 	
 	// Now print a simple chart of X / Y trajectory spaced at 10yd increments
 	int s=0;
-	for (s=0;s<=1000;s+=100) {
-		printf("\nX: %.0f     Y: %.2f", Ballistics_get_range(solution, s), Ballistics_get_path(solution, s));
+	for (s=0; s<=1000; s+=100) {
+		printf("X: %.0f     Y: %.2f\n", Ballistics_get_range(solution, s), Ballistics_get_path(solution, s));
 	}
 
   Ballistics_free(solution);

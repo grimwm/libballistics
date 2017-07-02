@@ -51,7 +51,7 @@ How to use this library
 
 1. Declare storage for accessing solution data.
 
-    `struct Ballistics* solution;`
+    `Ballistics* solution;`
 
 1. **Optional**: Use the weather correction functions to correct a standard ballistic
    coefficient for non-standard conditions.
@@ -75,7 +75,7 @@ How to use this library
 
 1. Access the solution using one of the access functions provided.
 
-    `printf("\nX: %.0f     Y: %.2f",Ballistics_get_range(solution, 10), Ballistics_get_path(solution, 10));`
+    `printf("X: %.0f     Y: %.2f\n", Ballistics_get_range(solution, 10), Ballistics_get_path(solution, 10));`
 
 1. When you are done with the solution, free the memory.
 

@@ -26,30 +26,30 @@ extern "C" {
 #include "windage.h"
 #include "pbr.h"
 
-struct Ballistics;
+typedef struct Ballistics Ballistics;
 
 // Functions for retrieving data from a solution generated with solve()
-void Ballistics_free(struct Ballistics* ballistics);
+void Ballistics_free(Ballistics* ballistics);
 
 // Returns range, in yards.
-double Ballistics_get_range(struct Ballistics* ballistics, int yardage);
+double Ballistics_get_range(Ballistics* ballistics, int yardage);
 // Returns projectile path, in inches, relative to the line of sight.
-double Ballistics_get_path(struct Ballistics* ballistics, int yardage);
+double Ballistics_get_path(Ballistics* ballistics, int yardage);
 // Returns an estimated elevation correction for achieving a zero at this range.
 // this is useful for "click charts" and the like.
-double Ballistics_get_moa(struct Ballistics* ballistics, int yardage);
+double Ballistics_get_moa(Ballistics* ballistics, int yardage);
 // Returns the projectile's time of flight to this range.
-double Ballistics_get_time(struct Ballistics* ballistics, int yardage);
+double Ballistics_get_time(Ballistics* ballistics, int yardage);
 // Returns the windage correction in inches required to achieve zero at this range.
-double Ballistics_get_windage(struct Ballistics* ballistics, int yardage);
+double Ballistics_get_windage(Ballistics* ballistics, int yardage);
 // Returns an approximate windage correction in MOA to achieve a zero at this range.
-double Ballistics_get_windage_moa(struct Ballistics* ballistics, int yardage);
+double Ballistics_get_windage_moa(Ballistics* ballistics, int yardage);
 // Returns the projectile's total velocity (Vector product of Vx and Vy)
-double Ballistics_get_velocity(struct Ballistics* ballistics, int yardage);
+double Ballistics_get_v_fps(Ballistics* ballistics, int yardage);
 // Returns the velocity of the projectile in the bore direction.
-double Ballistics_get_vx(struct Ballistics* ballistics, int yardage);
+double Ballistics_get_vx_fps(Ballistics* ballistics, int yardage);
 // Returns the velocity of the projectile perpendicular to the bore direction.
-double Ballistics_get_vy(struct Ballistics* ballistics, int yardage);
+double Ballistics_get_vy_fps(Ballistics* ballistics, int yardage);
 
 // For very steep shooting angles, vx can actually become what you would think of as vy relative to the ground,
 // because vx is referencing the bore's axis.  All computations are carried out relative to the bore's axis, and
@@ -80,7 +80,7 @@ double Ballistics_get_vy(struct Ballistics* ballistics, int yardage);
  *         solution.  This also indicates the maximum number of rows in the solution matrix,
  *         and should not be exceeded in order to avoid a memory segmentation fault.
  */
-int Ballistics_solve(struct Ballistics** ballistics, DragFunction drag_function, double drag_coefficient, double vi,
+int Ballistics_solve(Ballistics** ballistics, DragFunction drag_function, double drag_coefficient, double vi,
                      double sight_height, double shooting_angle, double zero_angle, double wind_speed, double wind_angle);
 
 #ifdef __cplusplus

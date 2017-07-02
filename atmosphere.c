@@ -19,40 +19,40 @@
 #include <math.h>
 
 // Drag coefficient atmospheric corrections
-double calcFR(double Temperature, double Pressure, double RelativeHumidity) {
-	double VPw=4e-6*pow(Temperature,3) - 0.0004*pow(Temperature,2)+0.0234*Temperature-0.2517;
-	double FRH=0.995*(Pressure/(Pressure-(0.3783)*(RelativeHumidity)*VPw));
-	return FRH;
+double calcFR(double temperature, double pressure, double relative_humidity) {
+	double VPw=4e-6*pow(temperature,3) - 0.0004*pow(temperature,2)+0.0234*temperature-0.2517;
+	double frh=0.995*(pressure/(pressure-(0.3783)*(relative_humidity)*VPw));
+	return frh;
 }
 
-double calcFP(double Pressure) {
-	double Pstd=29.53; // in-hg
-	double FP=0;
-	FP = (Pressure-Pstd)/(Pstd);
-	return FP;
+static inline double calcFP(double pressure) {
+	double p_std = 29.53; // in-hg; standard pressure at sea level
+	double fp=0;
+	fp = (pressure - p_std)/(p_std);
+	return fp;
 }
 
-double calcFT(double Temperature,double Altitude) {
-	double Tstd=-0.0036*Altitude+59;
-	double FT = (Temperature-Tstd)/(459.6+Tstd);
+static inline double calcFT(double temperature, double altitude) {
+	double t_std=-0.0036*altitude+59;
+	double FT = (temperature-t_std)/(459.6+t_std);
 	return FT;
 }
 
-double calcFA(double Altitude) {
+static inline double calcFA(double altitude) {
 	double fa=0;
-	fa=-4e-15*pow(Altitude,3)+4e-10*pow(Altitude,2)-3e-5*Altitude+1;
+	fa=-4e-15*pow(altitude,3)+4e-10*pow(altitude,2)-3e-5*altitude+1;
 	return (1/fa);
 }
 
 double atmosphere_correction(double drag_coefficient, double altitude, double barometer, double temperature,
 														 double relative_humidity) {
 
-	double FA = calcFA(altitude);
-	double FT = calcFT(temperature, altitude);
-	double FR = calcFR(temperature, barometer, relative_humidity);
-	double FP = calcFP(barometer);
+	double fa = calcFA(altitude);
+	double ft = calcFT(temperature, altitude);
+	double fr = calcFR(temperature, barometer, relative_humidity);
+	double fp = calcFP(barometer);
 
 	// Calculate the atmospheric correction factor
-	double CD = (FA*(1+FT-FP)*FR);
-	return drag_coefficient*CD;
+	double cd = (fa*(1+ft-fp)*fr);
+	return drag_coefficient*cd;
 }
