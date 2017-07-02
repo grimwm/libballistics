@@ -116,17 +116,16 @@ double Ballistics_get_vy_fps(Ballistics* ballistics, int yardage) {
 
 int Ballistics_solve(Ballistics** ballistics, DragFunction drag_function, double drag_coefficient, double vi,
                      double sight_height, double shooting_angle, double zero_angle, double wind_speed, double wind_angle) {
-
   double t=0;
   double dt=0;
   double v=0;
   double vx=0, vx1=0, vy=0, vy1=0;
   double dv=0, dvx=0, dvy=0;
   double x=0, y=0;
-  
+
   double hwind = headwind(wind_speed, wind_angle);
   double cwind = crosswind(wind_speed, wind_angle);
-  
+
   double gy = GRAVITY*cos(deg_to_rad((shooting_angle + zero_angle)));
   double gx = GRAVITY*sin(deg_to_rad((shooting_angle + zero_angle)));
 
@@ -165,7 +164,7 @@ int Ballistics_solve(Ballistics** ballistics, DragFunction drag_function, double
       s->vx_fps = vx;
       s->vy_fps = vy;
       n++;
-    }  
+    }
 
     // Compute position based on average velocity.
     x = x + dt * (vx+vx1)/2;
