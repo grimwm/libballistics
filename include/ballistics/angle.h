@@ -18,17 +18,37 @@
 
 #include "drag.h"
 
+#include <math.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-// Angular conversion functions to make things a little easier.
-double deg_to_moa(double deg); // Converts degrees to minutes of angle
-double deg_to_rad(double deg); // Converts degrees to radians
-double moa_to_deg(double moa); // Converts minutes of angle to degrees
-double moa_to_rad(double moa); // Converts minutes of angle to radians
-double rad_to_deg(double rad); // Converts radians to degrees
-double rad_to_moa(double rad); // Converts radiants to minutes of angle
+// Specialty angular conversion functions
+// Converts degrees to minutes of angle
+static inline double deg_to_moa(double deg) {
+  return deg*60;
+}
+// Converts degrees to radians
+static inline double deg_to_rad(double deg) {
+  return deg*M_PI/180;
+}
+// Converts minutes of angle to degrees
+static inline double moa_to_deg(double moa) {
+  return moa/60;
+}
+// Converts minutes of angle to radians
+static inline double moa_to_rad(double moa) {
+  return moa/60*M_PI/180;
+}
+// Converts radians to degrees
+static inline double rad_to_deg(double rad) {
+  return rad*180/M_PI;
+}
+// Converts radiants to minutes of angle
+static inline double rad_to_moa(double rad) {
+  return rad*60*180/M_PI;
+}
 
 /**
  * A function to determine the bore angle needed to achieve a target zero at Range yards

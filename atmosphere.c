@@ -19,7 +19,7 @@
 #include <math.h>
 
 // Drag coefficient atmospheric corrections
-double calcFR(double temperature, double pressure, double relative_humidity) {
+static inline double calcFR(double temperature, double pressure, double relative_humidity) {
 	double VPw=4e-6*pow(temperature,3) - 0.0004*pow(temperature,2)+0.0234*temperature-0.2517;
 	double frh=0.995*(pressure/(pressure-(0.3783)*(relative_humidity)*VPw));
 	return frh;

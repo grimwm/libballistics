@@ -25,11 +25,14 @@ extern "C" {
  * given flight time in a vacuum, and given flight time in real life.
  * @param wind_speed The wind velocity in mi/hr.
  * @param vi         The initial velocity of the projectile (muzzle velocity).
- * @param x          The range at which you wish to determine windage, in feet.
+ * @param x         The range at which you wish to determine windage, in feet.
  * @param t          The time it has taken the projectile to traverse the range x, in seconds.
  * @return The amount of windage correction, in inches, required to achieve zero on a target at the given range.
  */
-double windage(double wind_speed, double vi, double x, double t);
+static inline double windage(double wind_speed, double vi, double x, double t) {
+  double vw = wind_speed*17.60; // Convert to inches per second.
+  return (vw*(t-x/vi));
+}
 
 /**
  * Resolve any wind / angle combination into headwind.
@@ -42,7 +45,10 @@ double windage(double wind_speed, double vi, double x, double t);
  *                   270 or -90 degrees is from left to right.
  * @return the headwind velocity component, in mi/hr.
  */
-double headwind(double wind_speed, double wind_angle);
+static inline double headwind(double wind_speed, double wind_angle) {
+  double w_angle = deg_to_rad(wind_angle);
+  return (cos(w_angle) * wind_speed);
+}
 
 /**
  * Resolve any wind / angle combination into crosswind.
@@ -55,7 +61,10 @@ double headwind(double wind_speed, double wind_angle);
  *                   270 or -90 degrees is from left to right.
  * @return the crosswind velocity component, in mi/hr.
  */
-double crosswind(double wind_speed, double wind_angle);
+static inline double crosswind(double wind_speed, double wind_angle) {
+  double w_angle = deg_to_rad(wind_angle);
+  return (sin(w_angle) * wind_speed);
+}
 
 #ifdef __cplusplus
 }

@@ -17,8 +17,7 @@ add_library(ballistics STATIC
         atmosphere.c
         ballistics.c
         pbr.c
-        retard.c
-        windage.c)
+        )
 target_link_libraries(ballistics PRIVATE m)
 set_target_properties(ballistics PROPERTIES LINK_FLAGS "-Wl,--whole-archive")
 install(TARGETS ballistics DESTINATION lib)
