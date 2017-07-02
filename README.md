@@ -47,11 +47,11 @@ How to use this library
 
 1. Include the library header.
 
-	`#include <ballistics.h>`
+	`#include <ballistics/ballistics.h>`
 
 1. Declare storage for accessing solution data.
 
-    `struct BallisticsSolutions* solution;`
+    `struct Ballistics* solution;`
 
 1. **Optional**: Use the weather correction functions to correct a standard ballistic
    coefficient for non-standard conditions.
@@ -68,17 +68,18 @@ How to use this library
 
     `double zeroangle = zero_angle(G1, 0.465, 2750, 1.6, 100, 0);`
 
-1. Generate a solution matrix tied to the pointer created earlier.  Memory is allocated in `solve()`.
+1. Generate a solution matrix tied to the pointer created earlier.  Memory is allocated
+   in `Ballistics_solve()`.
 
-    `k = solve(&solution, G1, bc, v, sh, angle, zeroangle, windspeed, windangle);`
+    `k = Ballistics_solve(&solution, G1, bc, v, sh, angle, zeroangle, windspeed, windangle);`
 
 1. Access the solution using one of the access functions provided.
 
-    `printf("\nX: %.0f     Y: %.2f",solution_get_range(solution, 10), solution_get_path(solution, 10));`
+    `printf("\nX: %.0f     Y: %.2f",Ballistics_get_range(solution, 10), Ballistics_get_path(solution, 10));`
 
 1. When you are done with the solution, free the memory.
 
-    `solution_free(solution);`
+    `Ballistics_free(solution);`
 
 1. When building, be sure to link against *libballistics.a*.  On many linkers, this is done
    with `-lballistics`.

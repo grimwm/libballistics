@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-// Crosswind correction functions
 #include "ballistics/ballistics.h"
 
 #include <math.h>
@@ -24,14 +23,14 @@ double windage(double wind_speed, double vi, double xx, double t) {
 	return (vw*(t-xx/vi));
 }
 
-// Headwind is positive at WindAngle=0
+// Headwind is positive at wind_angle=0
 double headwind(double wind_speed, double wind_angle) {
 	double w_angle = deg_to_rad(wind_angle);
-	return (cos(w_angle)*wind_speed);
+	return (cos(w_angle) * wind_speed);
 }
 
 // Positive is from Shooter's Right to Left (Wind from 90 degree)
 double crosswind(double wind_speed, double wind_angle) {
 	double w_angle = deg_to_rad(wind_angle);
-	return (sin(w_angle)*wind_speed);
+	return (sin(w_angle) * wind_speed);
 }

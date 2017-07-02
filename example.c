@@ -50,8 +50,8 @@ int main(void) {
 	
 	// Now print a simple chart of X / Y trajectory spaced at 10yd increments
 	int s=0;
-	for (s=0;s<=100;s++) {
-		printf("\nX: %.0f     Y: %.2f", Ballistics_get_range(solution, s*10), Ballistics_get_path(solution, s*10));
+	for (s=0;s<=1000;s+=100) {
+		printf("\nX: %.0f     Y: %.2f", Ballistics_get_range(solution, s), Ballistics_get_path(solution, s));
 	}
 
   Ballistics_free(solution);

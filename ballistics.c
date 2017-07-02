@@ -117,45 +117,43 @@ double Ballistics_get_vy(struct Ballistics* ballistics, int yardage) {
 int Ballistics_solve(struct Ballistics** ballistics, DragFunction drag_function, double drag_coefficient, double vi,
                      double sight_height, double shooting_angle, double zero_angle, double wind_speed, double wind_angle) {
 
-	double t=0;
-	double dt=0.5/vi;
-	double v=0;
-	double vx=0, vx1=0, vy=0, vy1=0;
-	double dv=0, dvx=0, dvy=0;
-	double x=0, y=0;
-	
-	double hwind = headwind(wind_speed, wind_angle);
-	double cwind = crosswind(wind_speed, wind_angle);
-	
-	double Gy=GRAVITY*cos(deg_to_rad((shooting_angle + zero_angle)));
-	double Gx=GRAVITY*sin(deg_to_rad((shooting_angle + zero_angle)));
+  double t=0;
+  double dt=0;
+  double v=0;
+  double vx=0, vx1=0, vy=0, vy1=0;
+  double dv=0, dvx=0, dvy=0;
+  double x=0, y=0;
+  
+  double hwind = headwind(wind_speed, wind_angle);
+  double cwind = crosswind(wind_speed, wind_angle);
+  
+  double gy=GRAVITY*cos(deg_to_rad((shooting_angle + zero_angle)));
+  double gx=GRAVITY*sin(deg_to_rad((shooting_angle + zero_angle)));
 
   *ballistics = Ballistics_alloc();
 
-	vx=vi*cos(deg_to_rad(zero_angle));
-	vy=vi*sin(deg_to_rad(zero_angle));
+  vx = vi * cos(deg_to_rad(zero_angle));
+  vy = vi * sin(deg_to_rad(zero_angle));
 
-	y=-sight_height/12;
+  y = -sight_height/12; // y is in feet
 
-	int n=0;
-	for (t=0;;t=t+dt) {
+  int n = 0;
+  for (t = 0;; t = t + dt) {
+    vx1 = vx;
+    vy1 = vy;
+    v = pow(pow(vx,2)+pow(vy,2),0.5);
+    dt = 0.5/v;
 
-		vx1=vx, vy1=vy;	
-		v=pow(pow(vx,2)+pow(vy,2),0.5);
-		dt=0.5/v;
-	
-		// Compute acceleration using the drag function retardation	
-		dv = retard(drag_function,drag_coefficient,v+hwind);
-		dvx = -(vx/v)*dv;
-		dvy = -(vy/v)*dv;
+    // Compute acceleration using the drag function retardation  
+    dv = retard(drag_function, drag_coefficient, v+hwind);
+    dvx = -(vx/v)*dv;
+    dvy = -(vy/v)*dv;
 
-		// Compute velocity, including the resolved gravity vectors.	
-		vx=vx + dt*dvx + dt*Gx;
-		vy=vy + dt*dvy + dt*Gy;
+    // Compute velocity, including the resolved gravity vectors.  
+    vx = vx + dt*dvx + dt*gx;
+    vy = vy + dt*dvy + dt*gy;
 
-
-
-		if (x/3>=n) {
+    if (x/3 >= n) {
       struct Point* s = &(*ballistics)->yardages[n];
       s->range_yards = x/3;
       s->path_inches = y*12;
@@ -166,17 +164,16 @@ int Ballistics_solve(struct Ballistics** ballistics, DragFunction drag_function,
       s->velocity = v;
       s->vx = vx;
       s->vy = vy;
-			n++;
-		}	
-		
-		// Compute position based on average velocity.
-		x=x+dt*(vx+vx1)/2;
-		y=y+dt*(vy+vy1)/2;
-		
-		if (fabs(vy)>fabs(3*vx)) break;
-		if (n>=BALLISTICS_COMPUTATION_MAX_YARDS) break;
-	}
+      n++;
+    }  
+
+    // Compute position based on average velocity.
+    x = x + dt * (vx+vx1)/2;
+    y = y + dt * (vy+vy1)/2;
+
+    if (fabs(vy)>fabs(3*vx) || n>=BALLISTICS_COMPUTATION_MAX_YARDS) break;
+  }
 
   (*ballistics)->max_yardage = n;
-	return n;
+  return n;
 }

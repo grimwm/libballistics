@@ -33,25 +33,27 @@ double windage(double wind_speed, double vi, double x, double t);
 
 /**
  * Resolve any wind / angle combination into headwind.
+ * Headwind is positive at {@code wind_angle=0}
  * @param wind_speed The wind velocity, in mi/hr.
  * @param wind_angle The angle from which the wind is coming, in degrees.
  *                   0 degrees is from straight ahead
  *                   90 degrees is from right to left
  *                   180 degrees is from directly behind
  *                   270 or -90 degrees is from left to right.
- * @return the headwind or crosswind velocity component, in mi/hr.
+ * @return the headwind velocity component, in mi/hr.
  */
 double headwind(double wind_speed, double wind_angle);
 
 /**
  * Resolve any wind / angle combination into crosswind.
+ * Positive is from Shooter's Right to Left (Wind from 90 degree)
  * @param wind_speed The wind velocity, in mi/hr.
  * @param wind_angle The angle from which the wind is coming, in degrees.
  *                   0 degrees is from straight ahead
  *                   90 degrees is from right to left
  *                   180 degrees is from directly behind
  *                   270 or -90 degrees is from left to right.
- * @return the headwind or crosswind velocity component, in mi/hr.
+ * @return the crosswind velocity component, in mi/hr.
  */
 double crosswind(double wind_speed, double wind_angle);
 
