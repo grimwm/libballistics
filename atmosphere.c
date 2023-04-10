@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-#include "ballistics/ballistics.h"
+#include "include/ballistics/ballistics.h"
 
 #include <math.h>
 

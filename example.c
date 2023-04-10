@@ -14,17 +14,21 @@
  * limitations under the License.
  */
 
-//To compile this example, run the following: 
+//The following is all you need to compile this example: 
 //gcc -o example example.c -lm
+
 #include <stdio.h>
 #include "ballistics.c"
 #include "angle.c"
+#include "atmosphere.c"
 
+//The values below are from winchester 147 gr FMJ .308 out of a 20" barrel
+//The sight height is typical for scopes mounted on AR platforms.
 int main(void) {
 	int k=0;
 	Ballistics* solution;
-	double bc=0.5; // The ballistic coefficient for the projectile.
-	double v=1200; // Intial velocity, in ft/s
+	double G1_bc=0.415; // The ballistic coefficient for the projectile.
+	double v=2804; // Intial velocity, in ft/s
 	double sh=1.6; // The Sight height over bore, in inches.
 	double angle=0; // The shooting angle (uphill / downhill), in degrees.
 	double zero=100; // The zero range of the rifle, in yards.
@@ -35,7 +39,7 @@ int main(void) {
 	// Correct the BC for any weather conditions.  If we want standard conditions,
 	// then we can just leave this commented out.
 
-	// bc = atmosphere_correction(bc, 0, 29.59, 100, .7);
+	G1_bc = atmosphere_correction(G1_bc, 0, 29.59, 59, .58);
 	
 	
 	// First find the angle of the bore relative to the sighting system.
@@ -44,20 +48,19 @@ int main(void) {
 	// to us, but is required for making a full ballistic solution.
 	// It is left here to allow for zero-ing at altitudes (bc) different from the
 	// final solution, or to allow for zero's other than 0" (ex: 3" high at 100 yds)
-	double zeroangle = zero_angle(G1, bc, v, sh, zero, 0);
+	double zeroangle = zero_angle(G1, G1_bc, v, sh, zero, 0);
 	
 	// Now we have everything needed to generate a full solution.
 	// So we do.  The solution is stored in the pointer "sln" passed as the last argument.
 	// k has the number of yards the solution is valid for, also the number of rows in the solution.
-	k = Ballistics_solve(&solution, G1, bc, v, sh, angle, zeroangle, windspeed, windangle);
+	k = Ballistics_solve(&solution, G1, G1_bc, v, sh, angle, zeroangle, windspeed, windangle);
 	
 	// Now print a simple chart of X / Y trajectory spaced at 100yd increments
-	int s=0;
-	for (s=0; s<=1000; s+=100) {
-		printf("X: %.0f     Y: %.2f\n", Ballistics_get_range(solution, s), Ballistics_get_path(solution, s));
+	for (int s=0; s<=1000; s+=100) {
+		printf("Distance (yards): %.0f     Vertical Correction (inches): %.2f\n", Ballistics_get_range(solution, s), Ballistics_get_path(solution, s));
 	}
 
-  Ballistics_free(solution);
+    Ballistics_free(solution);
 	
 	return 0;
 }
